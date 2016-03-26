@@ -14,8 +14,8 @@ var RecipeForm = React.createClass({
   },
   render: function(){
     return (
-      <div class="row">
-        <div class="col-md-12">
+      <div className="row">
+        <div className="col-md-12">
           <form>
             <input name="title" type="#" id="title" placeholder="Recipe Title" /><br/>
             <input name="ingredient" type="#" id="ingredient" placeholder="first ingredient" />

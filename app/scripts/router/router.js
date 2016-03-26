@@ -3,8 +3,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var $ = require('jquery');
 
-var SignupPage = require('./components/signup.jsx');
-var RecipeForm = require('./components/recipe-form.jsx');
+var SignupPageComponent = require('../components/signup.jsx').SignupPageComponent;
+var RecipeForm = require('../components/recipe-form.jsx').RecipeForm;
 
 var Router = Backbone.Router.extend({
   routes: {
@@ -14,7 +14,7 @@ var Router = Backbone.Router.extend({
   },
   login: function(){
     ReactDOM.render(
-      React.createElement(SignupPage), document.getElementById('home')
+      React.createElement(SignupPageComponent), document.getElementById('home')
     );
   },
   recipe: function(){
