@@ -3,12 +3,16 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var LinkedStateMixin = require('react/lib/LinkedStateMixin');
 require('backbone-react-component');
 
 var Parse = require('parse');
+var ParseReact = require('parse-react');
+
+$(function(){
 Parse.initialize("recipe");
-Parse.erverURL = "http://recipe-card.herokuapp.com/";
-console.log(Parse);
+Parse.serverURL = "http://recipe-card.herokuapp.com/";
+});
 
 
 var SignupPageComponent = React.createClass({
@@ -17,8 +21,9 @@ var SignupPageComponent = React.createClass({
   login: function(username, password){
     Parse.User.logIn(username, password, {
       success: function(user){
-        Backbone.history.navigate("home", {trigger: true});
+        Backbone.history.navigate("recipe", {trigger: true});
         this.props.setUser(user);
+        console.log(success);
       }.bind(this),
       error: function(user, error){
         console.log(error);
@@ -26,18 +31,19 @@ var SignupPageComponent = React.createClass({
     })
   },
 
-  createUser: function(username, email, password){
-
+  createUser: function(email, password){
+    console.log(email);
     var user = new Parse.User();
     user.set({
-      "username": username,
-      "password": password,
-      "email": email
+      'username': email,
+      'password': password
     });
 
-    user.signup(null, {
+    user.signUp(null, {
       success: function(user){
         Backbone.history.navigate("home", {trigger: true});
+        alert("Success!");
+        console.log(user);
       },
       error: function(user, error){
         alert("Error" + error.code + " " + error.message);
@@ -84,9 +90,9 @@ var LoginComponent = React.createClass({
   render: function(){
     return (
       <div>
-        <form onSubmit={this.props.handleSubmit} className="login">
+        <form onSubmit={this.handleSubmit} className="login">
           <input name="username" onChange={this.handleUsername} value={this.state.username} id="username" placeholder="username" /><br/>
-          <input name="password" onChange={this.handlePassword} value={this.state.username} id="password" placeholder="password" /><br/>
+          <input name="password" onChange={this.handlePassword} value={this.state.password} id="password" placeholder="password" /><br/>
           <input type="submit" value="Login!" />
         </form>
       </div>
@@ -96,16 +102,11 @@ var LoginComponent = React.createClass({
 
 
 var SignupComponent = React.createClass({
-  mixins:[Backbone.React.Component.mixin],
   getInitialState: function(){
     return {
-      username: '',
-      email: '',
-      password: ''
+      "email": '',
+      "password": ''
     }
-  },
-  handleUsername: function(event){
-    this.setState({'username': event.target.value});
   },
   handlePassword: function(event){
     this.setState({'password': event.target.value });
@@ -120,8 +121,7 @@ var SignupComponent = React.createClass({
   render: function(){
     return (
       <div>
-        <form onSubmit={this.props.handleSubmit} className="signup">
-          <input name="username" onChange={this.handleUsername} value={this.state.username} id="username" placeholder="username" /><br/>
+        <form onSubmit={this.handleSubmit} className="signup">
           <input name="email" onChange={this.handleEmail} value={this.state.email} id="email" placeholder="example@email.com" /><br/>
           <input name="password" onChange={this.handlePassword} value={this.state.password} id="password" placeholder="password" /><br/>
           <input type="submit" value="Signup!" />
